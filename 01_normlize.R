@@ -47,6 +47,7 @@ group_list1 = ifelse(str_detect(pd1$title,"Tumour"),"Tumour","Normal")
 group_list2 = ifelse(str_detect(pd2$source_name_ch1,"Paracancerous"),"Normal","Tumour")[-3]
 
 group_list = c(group_list1,group_list2)
+table(group_list)
 group_list = factor(group_list,levels = c("Normal","Tumour"))
 save(gse,group_list,exp,gpl,file = "normlize.Rdata")
 

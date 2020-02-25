@@ -1,16 +1,15 @@
 rm(list = ls())
 load("normlize.Rdata")
-#处理批次效应(combat)
-library(sva)
-?ComBat
-
+#处理批次效应
+library(limma)
+#?removeBatchEffect()
+y <- exp
 batch <- c(rep("A",12),rep("B",5))
-mod = model.matrix(~as.factor(group_list))
-exp2 = ComBat(dat=exp, batch=batch, mod=mod, par.prior=TRUE, ref.batch="A")
+y2 <- removeBatchEffect(y, batch)
 par(mfrow=c(1,2))
-boxplot(as.data.frame(exp),main="Original")
-boxplot(as.data.frame(exp2),main="Batch corrected")
-exp = exp2
+boxplot(as.data.frame(y),main="Original")
+boxplot(as.data.frame(y2),main="Batch corrected")
+exp = y2
 #exp = log2(exp+1)
 #PCA
 {
@@ -26,8 +25,8 @@ exp = exp2
                addEllipses = TRUE, # Concentration ellipses
                legend.title = "Groups"
   )
-  dir.create(gse)
-  ggsave(paste0(gse,"/PCA.png"))
+  if(!dir.exists(gse)) dir.create(gse)
+  ggsave(paste0(gse,"/limmaPCA.png"))
 }
 
 
@@ -119,8 +118,8 @@ p
 #ggsave(paste0(gse,"/volcano.png"))
 
 
-x=deg$logFC 
-names(x)=deg$probe_id 
+#x=deg$logFC 
+#names(x)=deg$probe_id 
 #cg=c(names(head(sort(x),30)),
 #     names(tail(sort(x),30)))
 cg = deg$circRNA[deg$change != "stable"]
@@ -139,4 +138,3 @@ pheatmap(n,show_colnames =F,
          #cluster_cols = F, 
          annotation_col=annotation_col) 
 
-#保存
