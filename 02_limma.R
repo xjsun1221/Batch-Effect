@@ -80,18 +80,15 @@ if(F){
   ls("package:hgu133a.db")
   ids <- toTable(hgu133aSYMBOL)
   head(ids)
-  
-  #merge
-  deg <- inner_join(deg,ids,by="probe_id")
-  head(deg)
-}
 
-if(T){
+}else{
+  
   ids = data.table::fread("GSE83521_family.soft",header = T)[,c("ID","circRNA")]
   colnames(ids)[1] = "probe_id"
-  deg <- inner_join(deg,ids,by="probe_id")
-  head(deg)
 }
+
+deg <- inner_join(deg,ids,by="probe_id")
+  head(deg)
 #3.加change列：上调或下调，火山图要用
 
 logFC_t=1 #不同的阈值，筛选到的差异基因数量就不一样，后面的超几何分布检验结果就大相径庭。

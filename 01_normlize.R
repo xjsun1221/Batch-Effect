@@ -39,9 +39,8 @@ pd2 <- pData(eSet2[[1]])
 #(3)提取芯片平台编号
 gpl <- eSet2[[1]]@annotation
 
-
-identical(rownames(pd1),colnames(exp1))
-identical(rownames(pd2),colnames(exp2))
+if(!identical(rownames(pd1),colnames(exp1))) exp1 = exp1[,match(rownames(pd1),colnames(exp1))]
+if(!identical(rownames(pd2),colnames(exp2))) exp2 = exp2[,match(rownames(pd2),colnames(exp2))]
 
 group_list1 = ifelse(str_detect(pd1$title,"Tumour"),"Tumour","Normal")
 group_list2 = ifelse(str_detect(pd2$source_name_ch1,"Paracancerous"),"Normal","Tumour")[-3]
